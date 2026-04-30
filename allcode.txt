@@ -1,0 +1,715 @@
+*week-7*-S3,DynamoDB,Lambda
+1)create a bucket
+2)create a dynamo table,put partition key unique
+3)create lambda function,select runtime python 3.14,use execution role as lab role
+4)write that boto3 code and click deploy
+5)add new trigger search s3 and select that bucket
+6)goto dynamo tables ,click on explore table items and click refersh
+-----------------------------------------------------------------------------------------------------------------
+*week-8*-S3-SNS-SQS-LAMBDA SERVICE
+1)create a bucket
+2)SNS,create a topic,select standard,in subscriptions u can create email subscription too
+3)create a SQS queue 
+4)open sns topics select and click on edit access policy,change sns resourse,s3 ARN,aws accid from the access policy,save changes
+5)open sqs,edit access policy change sns,sqs and click save
+6)open SNS,create subscription for SQS.
+7)in s3 bucket go to prop,create event notification select all objects create event ,select destination sns
+9)go to sns,send and receive msges,click poll 
+8)create lambda function,create trigger sqs,paste the code and check cloud logs..
+--------------------------------------------------------------------------------------------------------------------
+*week-9*-Elastic Load Balancer with Auto Scaling using AWS EC2 Instances.
+keep lbs,instances in same avaiability zones
+1)create instance 1,select linux,create security grps ssh-myIP, HTTP-anywhere,run the commands in connect
+2)create instance 2,select linux,create security grps ssh-myIP, HTTP-anywhere,run the commands in connect
+3)create secutrity grp,lb-sq,edit inbould rule HTTP,anywhere 0.0.0.0
+4)Create application load balancer my-alb,
+select 1a,1b subnets,
+select lb-sg security grps
+5)create target group-> web-servers-tg,type instances
+select 2 previous instaces as register targets
+Click Include as pending → Register
+create the target group
+6)goback to my-alb,select the target group,create the load balancer
+7)copy the dns and check if server 1 or server 2 is visible
+8)select any one instance create image from it
+9)	Launch Template Name: my-launch-template
+	AMI: Select the AMI created in Step 1 (my-webserver-AMI)
+	Instance Type: t2.micro (or your choice)
+	Key Pair: Select your existing key pair
+	Security Groups: Select the Load Balancer Security Group (allow HTTP 80)
+10)create auto  scaling groups
+select previous launch template
+version 1-default
+next
+select previously choosen subnets
+next
+attach to a existing load balancer
+select the target group
+next
+desired capacity 2
+min:1,max:4
+create autoscaling group
+in that autoscaling group go to instance management
+and check by deleting any one instace
+------------------------------------------------------------------------------------
+*week-10* :EBS
+1)open eclipe
+new file ,create maven project,
+check create a simple maven project
+Group Id: com.example
+Artifact Id: my-web-app
+Packaging: war   ✅ IMPORTANT
+src/main/webapp/ add index.jsp
+create folder web-inf
+src/main/webapp/WEB-INF/ add web.xml
+edit pom.xml file
+right click run as build---> clean,package
+2)open amazon EBS
+create new application
+select plaform tomcat (corretto 21)
+ulpoad your .war file
+select serive role as lab role
+for ec2 instace profile labinstaceprofile
+next
+select all subnets
+next
+env type:loadBalancer
+min:2 max:5
+review and click
+u will get a link open it..
+------------------------------------------------------------------------------------------------------------------
+*week-11*-amazon lex
+Got it — I’ll go **step-by-step exactly like your doc**, but explained clearly so you *actually understand what you're doing*, not just copy-click.
+
+---
+
+# ✅ STEP 1: Open Amazon Lex
+
+📄 (From page 1) 
+
+### What to do:
+
+1. Login to AWS Console
+2. Search **Amazon Lex**
+3. Click **Create Bot**
+
+### What this means:
+
+* Amazon Lex = service to build chatbots (like Alexa backend)
+* You’re starting a **new chatbot project**
+
+---
+
+# ✅ STEP 2: Create Bot
+
+📄 (Page 2–3) 
+
+### Fill these:
+
+* Choose: **Create a blank bot**
+* Bot name: `YogitaHotelBookingBot`
+
+### Important settings:
+
+* IAM Role → **Create new role**
+* Language → **English**
+* Voice → Optional
+* Click **Done**
+
+### What this means:
+
+* You created a chatbot container
+* IAM role = permission so Lex can work (don’t overthink)
+
+---
+
+# ✅ STEP 3: Create Intent
+
+📄 (Page 4) 
+
+### Steps:
+
+1. Go to **Intents**
+2. Name → `BookHotel`
+3. Click **Create**
+
+### Concept:
+
+* **Intent = user goal**
+  👉 Example: "Book a hotel"
+
+---
+
+# ✅ STEP 4: Add Sample Utterances
+
+📄 (Page 4) 
+
+Add these:
+
+* I want to book a hotel
+* Book a room
+* Reserve hotel
+* I need a room
+
+### Concept:
+
+* These train the bot
+* More variations = better accuracy
+
+---
+
+# ✅ STEP 5: Create Slot (age)
+
+📄 (Page 5) 
+
+### Add Slot:
+
+* Slot name: `age`
+* Slot type: `AMAZON.Number`
+* Prompt: **What is your age?**
+* Mark as **Required**
+
+### Concept:
+
+* Slot = user input (like variable)
+* Required = bot will force user to answer
+
+---
+
+# ✅ STEP 6: Add Conditional Logic
+
+📄 (Page 8) 
+
+### Condition:
+
+```
+if {age} < 18
+```
+
+### Response:
+
+```
+You are not eligible for hotel booking
+```
+
+### Concept:
+
+* You control chatbot decisions
+* Like `if-else` in programming
+
+---
+
+# ✅ STEP 7: Add More Slots
+
+📄 (Page 9–10) 
+
+### 1. Location
+
+* Name: `location`
+* Type: `AMAZON.City`
+* Prompt: "Which city do you want?"
+* Required ✅
+
+---
+
+### 2. Check-in Date
+
+* Name: `checkin`
+* Type: `AMAZON.Date`
+* Prompt: "What is your check-in date?"
+* Required ✅
+
+(Optional retry):
+
+```
+Please provide a valid date (e.g., 2026-03-25)
+```
+
+---
+
+### 3. Nights
+
+* Name: `nights`
+* Type: `AMAZON.Number`
+* Prompt: "How many nights will you stay?"
+* Required ✅
+
+---
+
+# ✅ STEP 8: Create Custom Slot (RoomType)
+
+📄 (Page 10–11) 
+
+### Steps:
+
+1. Go to **Slot Types**
+2. Create new → `RoomType`
+
+### Add values:
+
+* Single
+* Double
+* Suite
+
+### Then use in intent:
+
+* Slot name: `RoomType`
+* Slot type: `RoomType`
+
+### Concept:
+
+* Custom slot = predefined options
+
+---
+
+# ✅ STEP 9: Add Response Cards (Buttons)
+
+📄 (Page 12) 
+
+### Add buttons:
+
+* Single
+* Double
+* Suite
+
+### Concept:
+
+* UI buttons instead of typing
+* Improves UX
+
+---
+
+# ✅ STEP 10: Configure Responses
+
+📄 (Page 18–19) 
+
+### Initial Response:
+
+```
+Welcome to Hotel Booking! What is your name?
+```
+
+### Confirmation:
+
+```
+Do you want to confirm booking in {location} for {nights} nights?
+```
+
+### Success Response:
+
+```
+Booking confirmed! See you in {location}
+```
+
+---
+
+# ✅ STEP 11: Build & Test
+
+📄 (Page 21–22) 
+
+### Steps:
+
+1. Click **Build**
+2. Open **Test chatbot panel**
+3. Type:
+
+```
+Book a hotel
+```
+
+---
+
+# ✅ Expected Flow (Final Output)
+
+📄 (Page 23) 
+
+```
+User: Book a hotel  
+Bot: What is your age?  
+User: 25  
+
+Bot: Which city do you want?  
+User: Hyderabad  
+
+Bot: Check-in date?  
+User: Tomorrow  
+
+Bot: Number of nights?  
+User: 2  
+
+Bot: Select room type  
+User: Double  
+
+Bot: Confirm booking?  
+User: Yes  
+
+Bot: Booking confirmed
+```
+
+---
+
+# 💡 Important Understanding (Don’t skip this)
+
+If you *just follow steps*, you’ll pass lab.
+
+But if you understand:
+
+* Intent = function
+* Slots = variables
+* Utterances = training data
+* Conditions = logic
+* Fulfillment = final action
+
+👉 Then you’re thinking like a **good developer, not average**
+
+---------------------------------------------------------------------------------------------------
+week-12:
+Alright — now I’ll go **step-by-step from your WEEK-12 IAM doc** (clean + exam-ready + practical understanding).
+
+---
+
+# ✅ PART A: IAM USER CREATION (GUI)
+
+📄 (From your doc) 
+
+---
+
+## 🔹 Step 1: Login as Root User
+
+* Open AWS Console
+* Login using **root account**
+
+👉 Root = full control (only use for setup, not daily work)
+
+---
+
+## 🔹 Step 2: Open IAM
+
+* Search **IAM**
+* Go to **Users**
+
+---
+
+## 🔹 Step 3: Create User
+
+* Click **Create user**
+
+---
+
+## 🔹 Step 4: Enter User Details
+
+Example:
+
+* Username → `S3_Specialist`
+* Enable → **Console access**
+* Set custom password
+
+👉 This creates a **login account for another person**
+
+---
+
+## 🔹 Step 5: Set Permissions
+
+* Choose → **Attach policies directly**
+* Select → `AmazonS3FullAccess`
+
+👉 Meaning:
+
+* User can ONLY work with S3
+* Cannot access EC2 or other services
+
+---
+
+## 🔹 Step 6: Create + Download CSV
+
+* Click **Create user**
+* Download `.csv`
+
+👉 Contains:
+
+* Username
+* Password
+* Login URL
+
+⚠️ VERY IMPORTANT: Save it
+
+---
+
+## 🔹 Step 7: Logout Root
+
+* Copy **Account ID**
+* Sign out
+
+---
+
+## 🔹 Step 8–9: Login as IAM User
+
+* Use login URL from CSV
+* Enter:
+
+  * Account ID
+  * Username
+  * Password
+
+---
+
+## 🔹 Test 1 (Restriction Check)
+
+* Go to **EC2**
+* Result → ❌ Access Denied
+
+👉 Because no EC2 permission
+
+---
+
+## 🔹 Test 2 (Permission Check)
+
+* Go to **S3**
+* Create bucket → ✅ Works
+
+👉 Because S3FullAccess is given
+
+---
+
+# 💡 KEY CONCEPT
+
+👉 IAM = **who can access what**
+
+---
+
+# ✅ PART B: CLI ACCESS (PROGRAMMATIC)
+
+📄 
+
+---
+
+## 🔹 Step 1: Generate Access Keys
+
+* Go to IAM → Users → Your user
+* Open **Security credentials**
+* Click **Create access key**
+* Choose → CLI
+
+Download CSV
+
+👉 Contains:
+
+* Access Key ID
+* Secret Access Key
+
+---
+
+## 🔹 Step 2: Install AWS CLI
+
+Download:
+
+```
+https://awscli.amazonaws.com/AWSCLIV2.msi
+```
+
+Install it
+
+---
+
+## 🔹 Step 3: Configure CLI
+
+Open CMD:
+
+```bash
+aws configure
+```
+
+Enter:
+
+* Access Key ID
+* Secret Access Key
+* Region → `ap-south-1`
+* Output → `json`
+
+---
+
+## 🔹 Step 4: Test Permissions
+
+### ❌ EC2 Command:
+
+```bash
+aws ec2 describe-instances
+```
+
+Result → AccessDenied
+
+👉 Because no EC2 permission
+
+---
+
+### ✅ S3 Commands:
+
+```bash
+aws s3 ls
+```
+
+👉 Lists buckets
+
+```bash
+aws s3 mb s3://your-unique-bucket-name
+```
+
+👉 Creates bucket
+
+---
+
+## 🔹 Step 5: Verify
+
+* Open AWS Console
+* Check S3 → bucket created
+
+---
+
+# 💡 IMPORTANT UNDERSTANDING
+
+| Concept         | Meaning                   |
+| --------------- | ------------------------- |
+| IAM User        | Person/login              |
+| Policy          | Permission                |
+| Role            | Temporary access          |
+| Access Key      | CLI login                 |
+| Least Privilege | Give only required access |
+
+---
+
+# ⚠️ COMMON MISTAKE (VERY IMPORTANT FOR VIVA)
+
+👉 If CLI shows AccessDenied:
+
+* Problem is NOT CLI
+* Problem = IAM permissions
+
+---
+
+# 🚀 REAL THINKING (NOT AVERAGE)
+
+Average student:
+
+> “Follow steps and done”
+
+Good developer:
+
+> “Permission model controls both GUI + CLI”
+
+---
+
+# 👉 NEXT STEP (Tell me)
+
+I can give you:
+
+1. ✅ **All 15 scenario answers (very important for exam)**
+2. ✅ **IAM + Lambda + Lex integration (project level)**
+3. ✅ **Quick revision cheat sheet (1 page)**
+
+Just tell 👍
+------------------------------------------------------------------------------------------------------------
+*week-13-*
+Step 1 — Create Role in Amazon Web Services IAM
+1.	Open IAM Console → Roles → Create role 
+2.	Trusted entity: Select AWS Service 
+3.	Use case: Choose EC2 
+4.	Click Next 
+Step 2 — Add Permissions
+1.	Search policy: AmazonS3FullAccess 
+2.	Select it → Next 
+Step 3 — Name the Role
+•	Name: EC2-S3-Role 
+•	Click Create role 
+Step 4 — Attach Role to EC2 Instance
+1.	Go to EC2 Dashboard 
+2.	Select running instance 
+3.	Actions → Security → Modify IAM role 
+4.	Select EC2-S3-Role → Update 
+Step 5 — Verify from Instance (No Access Keys!)
+SSH into instance and run:
+aws s3 ls
+aws ec2 describe-instances
+•	aws s3 ls  Works 
+•	aws ec2 describe-instances Unauthorized (no EC2 permission)
+------------------------------------------------------------------------------------
+week:7 aws lambda code
+import boto3
+from uuid import uuid4
+def lambda_handler(event, context):
+    s3 = boto3.client("s3")
+    dynamodb = boto3.resource('dynamodb')
+    for record in event['Records']:
+        bucket_name = record['s3']['bucket']['name']
+        object_key = record['s3']['object']['key']
+        size = record['s3']['object'].get('size', -1)
+        event_name = record ['eventName']
+        event_time = record['eventTime']
+        dynamoTable = dynamodb.Table('newtable')
+        dynamoTable.put_item(
+            Item={'unique': str(uuid4()), 'Bucket': bucket_name, 'Object': object_key,'Size': size, 'Event': event_name, 'EventTime': event_time})
+--------------------------------------------------------------------------------------------------------------------------------
+sns code:
+{
+  "Version": "2012-10-17",
+  "Id": "example-ID",
+  "Statement": [
+    {
+      "Sid": "Example SNS topic policy",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Action": [
+        "SNS:Publish"
+      ],
+      "Resource": "SNS topic ARN",
+      "Condition": {
+        "ArnLike": {
+          "aws:SourceArn": "s3 bucket ARN"
+        },
+        "StringEquals": {
+          "aws:SourceAccount": "account id"
+        }
+      }
+    }
+  ]
+}
+
+SQS code
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "sns.amazonaws.com"
+      },
+      "Action": "sqs:SendMessage",
+      "Resource": "SQS ARN",
+      "Condition": {
+        "ArnEquals": {
+          "aws:SourceArn": "SNS ARN"
+        }
+      }
+    }
+  ]
+}
+
+labda code week:8 sns and sqs
+def lambda_handler(event, context):
+
+    for record in event['Records']:
+        print("Message received from SQS:")
+        print(record['body'])
+
+    return {
+        'statusCode': 200,
+        'body': 'Message processed successfully'
+    }
+-----------------------------------------------------------------------------------------------------------
+week:9
+sudo yum update -y
+sudo yum install httpd -y
+sudo systemctl start httpd
+sudo systemctl enable httpd
+echo "This is Server 1" | sudo tee /var/www/html/index.html
+-----------------------------------------------------------------------------    
