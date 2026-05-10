@@ -79,534 +79,282 @@ review and click
 u will get a link open it..
 ------------------------------------------------------------------------------------------------------------------
 *week-11*-amazon lex
-Got it — I’ll go **step-by-step exactly like your doc**, but explained clearly so you *actually understand what you're doing*, not just copy-click.
+WEEK-11 AMAZON LEX
 
----
+STEP 1:
+Login AWS Console → Search Amazon Lex → Create Bot
 
-# ✅ STEP 1: Open Amazon Lex
+STEP 2:
+Create Blank Bot
+Bot Name: YogitaHotelBookingBot
+IAM Role: Create new role
+Language: English
+Click Done
 
-📄 (From page 1) 
+STEP 3:
+Go to Intents → Create Intent
+Intent Name: BookHotel
 
-### What to do:
-
-1. Login to AWS Console
-2. Search **Amazon Lex**
-3. Click **Create Bot**
-
-### What this means:
-
-* Amazon Lex = service to build chatbots (like Alexa backend)
-* You’re starting a **new chatbot project**
-
----
-
-# ✅ STEP 2: Create Bot
-
-📄 (Page 2–3) 
-
-### Fill these:
-
-* Choose: **Create a blank bot**
-* Bot name: `YogitaHotelBookingBot`
-
-### Important settings:
-
-* IAM Role → **Create new role**
-* Language → **English**
-* Voice → Optional
-* Click **Done**
-
-### What this means:
-
-* You created a chatbot container
-* IAM role = permission so Lex can work (don’t overthink)
-
----
-
-# ✅ STEP 3: Create Intent
-
-📄 (Page 4) 
-
-### Steps:
-
-1. Go to **Intents**
-2. Name → `BookHotel`
-3. Click **Create**
-
-### Concept:
-
-* **Intent = user goal**
-  👉 Example: "Book a hotel"
-
----
-
-# ✅ STEP 4: Add Sample Utterances
-
-📄 (Page 4) 
-
-Add these:
+STEP 4:
+Add Sample Utterances:
 
 * I want to book a hotel
 * Book a room
 * Reserve hotel
 * I need a room
 
-### Concept:
+STEP 5:
+Create Slot:
+Slot Name: age
+Slot Type: AMAZON.Number
+Prompt: What is your age?
+Required: Yes
 
-* These train the bot
-* More variations = better accuracy
+STEP 6:
+Add Conditional Logic:
+IF {age} < 18
+Response: You are not eligible for hotel booking
 
----
+STEP 7:
+Add More Slots
 
-# ✅ STEP 5: Create Slot (age)
+1. location
+   Type: AMAZON.City
+   Prompt: Which city do you want?
+   Required: Yes
 
-📄 (Page 5) 
+2. checkin
+   Type: AMAZON.Date
+   Prompt: What is your check-in date?
+   Retry Prompt: Please provide a valid date
+   Required: Yes
 
-### Add Slot:
+3. nights
+   Type: AMAZON.Number
+   Prompt: How many nights will you stay?
+   Required: Yes
 
-* Slot name: `age`
-* Slot type: `AMAZON.Number`
-* Prompt: **What is your age?**
-* Mark as **Required**
-
-### Concept:
-
-* Slot = user input (like variable)
-* Required = bot will force user to answer
-
----
-
-# ✅ STEP 6: Add Conditional Logic
-
-📄 (Page 8) 
-
-### Condition:
-
-```
-if {age} < 18
-```
-
-### Response:
-
-```
-You are not eligible for hotel booking
-```
-
-### Concept:
-
-* You control chatbot decisions
-* Like `if-else` in programming
-
----
-
-# ✅ STEP 7: Add More Slots
-
-📄 (Page 9–10) 
-
-### 1. Location
-
-* Name: `location`
-* Type: `AMAZON.City`
-* Prompt: "Which city do you want?"
-* Required ✅
-
----
-
-### 2. Check-in Date
-
-* Name: `checkin`
-* Type: `AMAZON.Date`
-* Prompt: "What is your check-in date?"
-* Required ✅
-
-(Optional retry):
-
-```
-Please provide a valid date (e.g., 2026-03-25)
-```
-
----
-
-### 3. Nights
-
-* Name: `nights`
-* Type: `AMAZON.Number`
-* Prompt: "How many nights will you stay?"
-* Required ✅
-
----
-
-# ✅ STEP 8: Create Custom Slot (RoomType)
-
-📄 (Page 10–11) 
-
-### Steps:
-
-1. Go to **Slot Types**
-2. Create new → `RoomType`
-
-### Add values:
+STEP 8:
+Create Custom Slot Type:
+Slot Type Name: RoomType
+Values:
 
 * Single
 * Double
 * Suite
 
-### Then use in intent:
+Use in Intent:
+Slot Name: roomtype
+Slot Type: RoomType
 
-* Slot name: `RoomType`
-* Slot type: `RoomType`
-
-### Concept:
-
-* Custom slot = predefined options
-
----
-
-# ✅ STEP 9: Add Response Cards (Buttons)
-
-📄 (Page 12) 
-
-### Add buttons:
+STEP 9:
+Add Response Card Buttons:
 
 * Single
 * Double
 * Suite
 
-### Concept:
+STEP 10:
+Configure Responses
 
-* UI buttons instead of typing
-* Improves UX
-
----
-
-# ✅ STEP 10: Configure Responses
-
-📄 (Page 18–19) 
-
-### Initial Response:
-
-```
+Initial Response:
 Welcome to Hotel Booking! What is your name?
-```
 
-### Confirmation:
-
-```
+Confirmation Response:
 Do you want to confirm booking in {location} for {nights} nights?
-```
 
-### Success Response:
-
-```
+Success Response:
 Booking confirmed! See you in {location}
-```
 
----
+IMPORTANT:
+Disable Fulfillment/Lambda Code Hook if Lambda error occurs.
 
-# ✅ STEP 11: Build & Test
-
-📄 (Page 21–22) 
-
-### Steps:
-
-1. Click **Build**
-2. Open **Test chatbot panel**
-3. Type:
-
-```
+STEP 11:
+Click Build
+Open Test Chatbot
+Type:
 Book a hotel
-```
 
----
+EXPECTED FLOW:
 
-# ✅ Expected Flow (Final Output)
+User: Book a hotel
+Bot: What is your age?
+User: 25
 
-📄 (Page 23) 
+Bot: Which city do you want?
+User: Hyderabad
 
-```
-User: Book a hotel  
-Bot: What is your age?  
-User: 25  
+Bot: Check-in date?
+User: Tomorrow
 
-Bot: Which city do you want?  
-User: Hyderabad  
+Bot: Number of nights?
+User: 2
 
-Bot: Check-in date?  
-User: Tomorrow  
+Bot: Select room type
+User: Double
 
-Bot: Number of nights?  
-User: 2  
-
-Bot: Select room type  
-User: Double  
-
-Bot: Confirm booking?  
-User: Yes  
+Bot: Confirm booking?
+User: Yes
 
 Bot: Booking confirmed
-```
 
----
-
-# 💡 Important Understanding (Don’t skip this)
-
-If you *just follow steps*, you’ll pass lab.
-
-But if you understand:
-
-* Intent = function
-* Slots = variables
-* Utterances = training data
-* Conditions = logic
-* Fulfillment = final action
-
-👉 Then you’re thinking like a **good developer, not average**
+KEY CONCEPTS:
+Intent = Function
+Slots = Variables
+Utterances = Training Data
+Conditions = Logic
+Fulfillment = Final Action
 
 ---------------------------------------------------------------------------------------------------
 week-12:
-Alright — now I’ll go **step-by-step from your WEEK-12 IAM doc** (clean + exam-ready + practical understanding).
+WEEK-12 IAM
 
----
+PART A — IAM USER CREATION (GUI)
 
-# ✅ PART A: IAM USER CREATION (GUI)
+STEP 1:
+Login AWS Console using Root User
 
-📄 (From your doc) 
+STEP 2:
+Search IAM → Open IAM Dashboard
 
----
+STEP 3:
+Go to Users → Click Create User
 
-## 🔹 Step 1: Login as Root User
+STEP 4:
+Enter Details
+Username: S3_Specialist
+Enable Console Access
+Set Custom Password
 
-* Open AWS Console
-* Login using **root account**
+STEP 5:
+Set Permissions
+Choose:
+Attach policies directly
+Select:
+AmazonS3FullAccess
 
-👉 Root = full control (only use for setup, not daily work)
+Meaning:
+User gets only S3 access
 
----
+STEP 6:
+Click Create User
+Download CSV file
 
-## 🔹 Step 2: Open IAM
+CSV contains:
 
-* Search **IAM**
-* Go to **Users**
-
----
-
-## 🔹 Step 3: Create User
-
-* Click **Create user**
-
----
-
-## 🔹 Step 4: Enter User Details
-
-Example:
-
-* Username → `S3_Specialist`
-* Enable → **Console access**
-* Set custom password
-
-👉 This creates a **login account for another person**
-
----
-
-## 🔹 Step 5: Set Permissions
-
-* Choose → **Attach policies directly**
-* Select → `AmazonS3FullAccess`
-
-👉 Meaning:
-
-* User can ONLY work with S3
-* Cannot access EC2 or other services
-
----
-
-## 🔹 Step 6: Create + Download CSV
-
-* Click **Create user**
-* Download `.csv`
-
-👉 Contains:
-
+* Login URL
 * Username
 * Password
-* Login URL
 
-⚠️ VERY IMPORTANT: Save it
+STEP 7:
+Logout Root Account
 
----
+STEP 8:
+Login as IAM User using:
 
-## 🔹 Step 7: Logout Root
+* Account ID
+* Username
+* Password
 
-* Copy **Account ID**
-* Sign out
+STEP 9:
+Test Permissions
 
----
+EC2 Access:
+Open EC2 → Access Denied
 
-## 🔹 Step 8–9: Login as IAM User
+S3 Access:
+Open S3 → Create Bucket → Works
 
-* Use login URL from CSV
-* Enter:
-
-  * Account ID
-  * Username
-  * Password
-
----
-
-## 🔹 Test 1 (Restriction Check)
-
-* Go to **EC2**
-* Result → ❌ Access Denied
-
-👉 Because no EC2 permission
+KEY CONCEPT:
+IAM controls WHO can access WHAT
 
 ---
 
-## 🔹 Test 2 (Permission Check)
+PART B — CLI ACCESS
 
-* Go to **S3**
-* Create bucket → ✅ Works
+STEP 1:
+Generate Access Keys
 
-👉 Because S3FullAccess is given
-
----
-
-# 💡 KEY CONCEPT
-
-👉 IAM = **who can access what**
-
----
-
-# ✅ PART B: CLI ACCESS (PROGRAMMATIC)
-
-📄 
-
----
-
-## 🔹 Step 1: Generate Access Keys
-
-* Go to IAM → Users → Your user
-* Open **Security credentials**
-* Click **Create access key**
-* Choose → CLI
+IAM → Users → S3_Specialist
+Security Credentials
+Create Access Key
+Choose:
+CLI
 
 Download CSV
 
-👉 Contains:
+Contains:
 
 * Access Key ID
 * Secret Access Key
 
----
-
-## 🔹 Step 2: Install AWS CLI
+STEP 2:
+Install AWS CLI
 
 Download:
-
-```
 https://awscli.amazonaws.com/AWSCLIV2.msi
-```
 
-Install it
+Install AWS CLI
 
----
-
-## 🔹 Step 3: Configure CLI
+STEP 3:
+Configure CLI
 
 Open CMD:
 
-```bash
 aws configure
-```
 
 Enter:
 
 * Access Key ID
 * Secret Access Key
-* Region → `ap-south-1`
-* Output → `json`
+* Region: ap-south-1
+* Output: json
 
----
+STEP 4:
+Test Permissions
 
-## 🔹 Step 4: Test Permissions
+EC2 Test:
 
-### ❌ EC2 Command:
-
-```bash
 aws ec2 describe-instances
-```
 
-Result → AccessDenied
+Result:
+AccessDenied
 
-👉 Because no EC2 permission
+Reason:
+No EC2 Permission
 
----
+S3 Test:
 
-### ✅ S3 Commands:
-
-```bash
 aws s3 ls
-```
 
-👉 Lists buckets
+Lists buckets
 
-```bash
+Create Bucket:
+
 aws s3 mb s3://your-unique-bucket-name
-```
 
-👉 Creates bucket
+Bucket gets created successfully
 
----
+STEP 5:
+Verify in AWS Console
+Open S3
+Check created bucket
 
-## 🔹 Step 5: Verify
+IMPORTANT CONCEPTS:
 
-* Open AWS Console
-* Check S3 → bucket created
+IAM User = Login/User
+Policy = Permission
+Role = Temporary Access
+Access Key = CLI Authentication
+Least Privilege = Give minimum required access
 
----
+IMPORTANT VIVA POINT:
+If CLI shows AccessDenied:
+Problem is IAM Permission
+NOT AWS CLI
 
-# 💡 IMPORTANT UNDERSTANDING
-
-| Concept         | Meaning                   |
-| --------------- | ------------------------- |
-| IAM User        | Person/login              |
-| Policy          | Permission                |
-| Role            | Temporary access          |
-| Access Key      | CLI login                 |
-| Least Privilege | Give only required access |
-
----
-
-# ⚠️ COMMON MISTAKE (VERY IMPORTANT FOR VIVA)
-
-👉 If CLI shows AccessDenied:
-
-* Problem is NOT CLI
-* Problem = IAM permissions
-
----
-
-# 🚀 REAL THINKING (NOT AVERAGE)
-
-Average student:
-
-> “Follow steps and done”
-
-Good developer:
-
-> “Permission model controls both GUI + CLI”
-
----
-
-# 👉 NEXT STEP (Tell me)
-
-I can give you:
-
-1. ✅ **All 15 scenario answers (very important for exam)**
-2. ✅ **IAM + Lambda + Lex integration (project level)**
-3. ✅ **Quick revision cheat sheet (1 page)**
-
-Just tell 👍
+REAL UNDERSTANDING:
+GUI and CLI both follow same IAM permission model.
 ------------------------------------------------------------------------------------------------------------
 *week-13-*
 Step 1 — Create Role in Amazon Web Services IAM
@@ -677,17 +425,19 @@ sns code:
 
 SQS code
 {
+  "Version": "2008-10-17",
   "Statement": [
     {
+      "Sid": "topic-subscription",
       "Effect": "Allow",
       "Principal": {
         "Service": "sns.amazonaws.com"
       },
-      "Action": "sqs:SendMessage",
-      "Resource": "SQS ARN",
+      "Action": "SQS:SendMessage",
+      "Resource": "arn:aws:sqs:us-east-1:574977697150:Simple_Queue",
       "Condition": {
         "ArnEquals": {
-          "aws:SourceArn": "SNS ARN"
+          "aws:SourceArn": "arn:aws:sns:us-east-1:574977697150:sns-Event-Topic"
         }
       }
     }
