@@ -1,0 +1,83 @@
+*week1:Instance,pem,ppk*
+1)creating a new instace ubuntu  and connecting it using ssh shell .pem
+2)connecting instace using .ppk & connecting to it using PUTTY
+3) changing .pem to .ppk and connecting to it using PUTTY
+-----------------------------------------------------------------------------------
+*week2:EBS*
+1)creating instance ubuntu and create extra volume and attach to it and modifying the volume
+2)creating partition in instace 1 cerating a directory and mounting the volume to it
+and permanently saving the files in the volume and rebooting instace
+then detaching the volume and reattaching to another instance and then mouting the volume disk and checking
+if the files are saved permanently
+*Instance-1*
+lsblk
+sudo fdisk /dev/nvme1n1
+n
+p
+3 times enter
+w
+partprobe
+lsblk -fs
+sudo mkfs.xfs /dev/nvme1n1p1
+lsblk -fs
+sudo mkdir /mnt/vajra
+sudo mount /dev/nvme1n1p1 /mnt/vajra
+ df -h
+sudo nano /etc/fstab
+UUID=1faf9d82-9ec8-4530-a192-ec96e03a64a5 /mnt/vajra   xfs   defaults,nofail   0   0
+cd /mnt/vajra
+sudo nano f1.txt
+cd..
+cd..
+sudo systemctl daemon-reload
+sudo mount -a
+-----------------------------
+*Instance-2*
+lsblk
+sudo mkdir /mnt/vajra
+sudo mount /dev/nvme1n1p1 /mnt/vajra
+df -h
+cd /mnt/vajra
+ls
+3)create a snapshot of volume,copy snapshot to destination,goto destination and create voulme from the snapshot
+------------------------------------------------------------------------------
+*week3:EFS*
+1)Creating 2 instaces of Amzon Linux with security grps of NFS and subnets of 1a and 1b
+2)Creating a EFS customizing and adding only above 2 instaces in network
+3)open 2 cmd shells
+sudo su
+mkdir efs
+yum install -y amazon-efs-utils
+sudo mount -t efs -o tls fs-0cc50aa977ab421e5:/ efs
+run the above in both shells
+cd efs
+touch f1.txt
+check the changes in another shell
+-----------------------------------------------------------------------
+*week-4: S3*
+1)create bucket and add objects
+2)enable versioning and check by re uploading
+3) CRR-create 2 buckets at diff regions and create replication rules
+4)Static webhosting-index.html and error.html
+5)bucket policy-gpt it with copied path
+-------------------------------------------------------------------------------
+*week-5:VPC*
+1)create vpc 0.0.0.0/16
+2)create 2 subnets private and public 0.0.1.0/24,0.0.2.0/24
+3)create route tables for each ,for public route add route internetgateway anywhere 0.0.0.0/0
+4)create Internet Gateway attach to VPC
+5)create 2 instances amazon select that vpc and select security grp as all icmp-v4 and edit network settings
+6)ping private addr in public console
+----------------------------------------------------------------------------------
+*week-6:NAT*
+1)create vpc
+2)create 2 subnets private and public
+3)create route tables for each
+4)create Internet Gateway for public
+5)create nat for private
+5)create 2 instances of ubuntu and select security grp as MYSQL aurora- my ip for private and private ip for public and edit network settings
+6)scp -i bastion.pem dbserver.pem ubuntu@<BASTION_PUBLIC_IP>:/home/ubuntu/
+7)ssh -i bastion.pem ubuntu@<BASTION_PUBLIC_IP>
+8)ls
+9) chmod 400 dbserver.pem in public git bash
+10)ssh -i "dbserver.pem" ubuntu@<DB_PRIVATE_IP>
